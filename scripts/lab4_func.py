@@ -100,16 +100,14 @@ def lab_ik():
 
 
     # =============================================================================#
-    theta_list = np.array(np.radians([standby, cube1_above, cube1_grab, cube1_release, cube2_above, cube2_grab, cube2_release]))
-    print(theta_list)
-    print(theta_list[1,1])
+    theta_list = np.array([standby, cube1_above, cube1_grab, cube1_release, cube2_above, cube2_grab, cube2_release])
     for i in range(len(theta_list)):
         for jj in range(len(thetalist0)):
             if theta_list[i,jj] >np.pi or theta_list[i,jj] < np.pi:
                 theta_list[i,jj] = wraptopi(theta_list[i,jj]) 
 
 
-    return theta_list
+    return np.rad2deg(theta_list)
 
 
 def angle_check(theta_list):
@@ -134,18 +132,18 @@ def main():
     theta_list = lab_ik()
     print("standby position joint angles =")
     print(theta_list[0])
-    print("cube1_above position joint angles =")
-    print(theta_list[1])
-    print("cube1_grab position joint angles =")
-    print(theta_list[2])
-    print("cube1_release position joint angles =")
-    print(theta_list[3])
-    print("cube2_above position joint angles =")
-    print(theta_list[4])
-    print("cube2_grab position joint angles =")
-    print(theta_list[5])
-    print("cube2_release position joint angles =")
-    print(theta_list[6])
+    # print("cube1_above position joint angles =")
+    # print(theta_list[1])
+    # print("cube1_grab position joint angles =")
+    # print(theta_list[2])
+    # print("cube1_release position joint angles =")
+    # print(theta_list[3])
+    # print("cube2_above position joint angles =")
+    # print(theta_list[4])
+    # print("cube2_grab position joint angles =")
+    # print(theta_list[5])
+    # print("cube2_release position joint angles =")
+    # print(theta_list[6])
     
     
     print("Done.")
