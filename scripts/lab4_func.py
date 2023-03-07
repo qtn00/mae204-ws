@@ -4,9 +4,9 @@
 
 import argparse
 import numpy as np
-# from scipy.linalg import expm
-import modern_robotics as mr
-np.float
+from scipy.linalg import expm
+from mr_functions import IKinSpace
+
 def wraptopi(angle):
     return (angle+np.pi) % (2*np.pi) - np.pi
 def Get_MS():
@@ -29,7 +29,7 @@ def Get_MS():
     # =============================================================================#
 
     S = np.array([S1, S2, S3, S4, S5, S6]).T
-    print(S)
+    
     return M,S
  
 def lab_ik():
@@ -71,36 +71,30 @@ def lab_ik():
     T = np.array([T1,T2,T3,T4,T5,T6,T7])
 
 
-    thetalist0 = np.radians([-30,-90,90,-90,-90,150 ])
+    thetalist0 = np.radians([-30,-90,90,-90,-90,150])
     eomg = 0.01
     ev = 0.1
 
 
-    [standby,f0] = mr.IKinSpace(S,M,T1,thetalist0,eomg,ev)
-    #standby = angle_check(standby)
+    [standby,f0] = IKinSpace(S,M,T1,thetalist0,eomg,ev)
     print(f0)
-    [cube1_above,f1] = mr.IKinSpace(S,M,T2,thetalist0,eomg,ev)
-    #cube1_above = angle_check(cube1_above)
+    [cube1_above,f1] = IKinSpace(S,M,T2,thetalist0,eomg,ev)
     print(f1)
-    [cube1_grab,f2] = mr.IKinSpace(S,M,T3,thetalist0,eomg,ev)
-    #cube1_grab = angle_check(cube1_grab)
+    [cube1_grab,f2] = IKinSpace(S,M,T3,thetalist0,eomg,ev)
     print(f2)
-    [cube1_release,f3] = mr.IKinSpace(S,M,T4,thetalist0,eomg,ev)
-    #cube1_release = angle_check(cube1_release)
+    [cube1_release,f3] = IKinSpace(S,M,T4,thetalist0,eomg,ev)
     print(f3)
-    [cube2_above,f4] = mr.IKinSpace(S,M,T5,thetalist0,eomg,ev)
-    #cube2_above = angle_check(cube2_above)
+    [cube2_above,f4] =IKinSpace(S,M,T5,thetalist0,eomg,ev)
     print(f4)
-    [cube2_grab,f5] = mr.IKinSpace(S,M,T6,thetalist0,eomg,ev)
-    #cube2_grab = angle_check(cube2_grab)
+    [cube2_grab,f5] = IKinSpace(S,M,T6,thetalist0,eomg,ev)
     print(f5)
-    [cube2_release,f6] = mr.IKinSpace(S,M,T7,thetalist0,eomg,ev)
-    #cube2_release = angle_check(cube2_release)
+    [cube2_release,f6] = IKinSpace(S,M,T7,thetalist0,eomg,ev)
     print(f6)
 
 
     # =============================================================================#
     theta_list = np.array([standby, cube1_above, cube1_grab, cube1_release, cube2_above, cube2_grab, cube2_release])
+
     for i in range(len(theta_list)):
         for jj in range(len(thetalist0)):
             if theta_list[i,jj] >np.pi or theta_list[i,jj] < np.pi:
@@ -113,23 +107,26 @@ def lab_ik():
 def angle_check(theta_list):
     # Checks if set of joint angles are within joint angle limits
     
-    if theta_list[0] > 180 or theta_list[0] < -180:
-        raise ValueError('First joint angle out of bounds')
-    if theta_list[1] > 0 or theta_list[1] < -90:
-        raise ValueError('Second joint angle out of bounds')
-    if theta_list[2] > 180 or theta_list[2] < 0:
-        raise ValueError('Third joint angle out of bounds')
-    if theta_list[3] > 180 or theta_list[3] < -180:
-        raise ValueError('Fourth joint angle out of bounds')
-    if theta_list[4] > 180 or theta_list[4] < -180:
-        raise ValueError('Fifth joint angle out of bounds')
-    if theta_list[5] > 180 or theta_list[5] < -180:
-        raise ValueError('Sixth joint angle out of bounds')
+    for i in range(0,6):
+        if theta_list[i,0] > 180 or theta_list[i,0] < -180:
+            raise ValueError('First joint angle out of bounds')
+        if theta_list[i,1] > 0 or theta_list[i,1] < -180:
+            raise ValueError('Second joint angle out of bounds')
+        if theta_list[i,2] > 180 or theta_list[i,2] < 0:
+            raise ValueError('Third joint angle out of bounds')
+        if theta_list[i,3] > 180 or theta_list[i,3] < -180:
+            raise ValueError('Fourth joint angle out of bounds')
+        if theta_list[i,4] > 180 or theta_list[i,4] < -180:
+            raise ValueError('Fifth joint angle out of bounds')
+        if theta_list[i,5] > 180 or theta_list[i,5] < -180:
+            raise ValueError('Sixth joint angle out of bounds')
 
 def main():
+    
     print("lab4_func.py")
 
     theta_list = lab_ik()
+    angle_check(theta_list)
     print("standby position joint angles =")
     print(theta_list[0])
     print("cube1_above position joint angles =")
